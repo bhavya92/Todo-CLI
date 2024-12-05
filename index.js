@@ -29,6 +29,15 @@ function createNewTaskFile(taskStr) {
         });
 
 }
+
+
+//Function to update the index of tasks in todo list after new or done operation
+function updateIndex() {
+    for(let i =0;i<mainArray.length;i++) {
+        mainArray[i]["id"] = i+1;
+    }
+}
+
 program.command('new')
     .description('Create a new todo')
     .argument('<string>','New todo task (put in inverted commas)')
@@ -52,7 +61,6 @@ program.command('new')
                 let newKey = parseInt(lastObject["id"]) + 1;
                 todoDict["id"] = newKey;
                 todoDict["task"] = str;
-        
                 mainArray.push(todoDict);
             
                 fs.writeFile('todo.json',JSON.stringify(mainArray),err => {
@@ -104,14 +112,14 @@ program.command('done')
                 }
             }
             else {
-                let mainArray = JSON.parse(data);
+                mainArray = JSON.parse(data);
                 let taskExist = false;
                 let newKey  = 1;
                 for (let i = 0;i<mainArray.length;i++) {
                     if(parseInt(mainArray[i]["id"]) === idToDelete){
                         taskExist = true;
                         mainArray = mainArray.filter(item => item.id !== idToDelete);
-
+                        updateIndex();
                         let todoJson = JSON.stringify(mainArray);
                         fs.writeFile('todo.json',todoJson,err => {
                             if(err) {
@@ -120,7 +128,7 @@ program.command('done')
                                 console.log("Task deleted!");
                             }
                         });
-                    } else {newKey = newKey + 1}
+                    } else {newKey = newKey + 1};
                 }
                 if(!taskExist) {
                     console.log("No such task exists");
