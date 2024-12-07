@@ -13,3 +13,6 @@
 ***Marking a task as done***<br>
 **node index.js done (task_number)**<br>
 *Eg - node index.js done 2*
+
+***Deleting the whole Todo List***<br>
+**node index.js delete**

@@ -137,4 +137,35 @@ program.command('done')
         })
     })
 
+program.command('delete')
+    .description('Delete the whole todo list')
+    .action( ()=> {
+        fs.readFile('todo.json','utf-8',(err,data) => {
+            if(err) {
+                if(err.code === 'ENOENT') {
+                    console.log("No Tasks exist");
+                } else {
+                    throw err;
+                }
+            }
+            else {
+                mainArray = JSON.parse(data);
+                if(mainArray.length === 0) {
+                    console.log("Todo List already Empty");
+                } else {
+                    mainArray = [];
+                    let todoJson = JSON.stringify(mainArray);
+                    fs.writeFile('todo.json',todoJson,err => {
+                    if(err) {
+                        throw err;
+                    } else {
+                        console.log("Todo List deleted!");
+                    }
+                });
+                }
+            }
+        })
+    } )
+
+
 program.parse();
